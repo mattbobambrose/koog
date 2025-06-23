@@ -48,15 +48,23 @@ public class AIAgentStrategy(
             throw IllegalArgumentException("Invalid node path: $fullPath")
 
         val strategyName = segments.firstOrNull() ?: return
+
+        // getting the very first segment (it should be root strategy node
         var currentNode: AIAgentNodeBase<*, *>? = nodeMap[strategyName]
 
-        for (segment in segments.drop(1)) {
+        for (segment in segments.drop(1).dropLast(1)) {
             currentNode as? HasSubnodes ?: throw IllegalStateException("Node ${currentNode?.name} does not have subnodes")
             val nextNode = currentNode.edges.firstOrNull { it.toNode.name == segment }?.toNode
             if (nextNode is HasSubnodes) {
                 currentNode.enforceNode(nextNode)
                 currentNode = nextNode
             }
+        }
+
+        val leaf = nodeMap[fullPath] ?: throw IllegalStateException("Node ${segments.last()} not found")
+        leaf.let {
+            currentNode as? HasSubnodes ?: throw IllegalStateException("Node ${currentNode?.name} does not have subnodes")
+            currentNode.enforceNode(it)
         }
     }
 }

@@ -128,7 +128,7 @@ public abstract class AIAgentSubgraphBuilderBase<Input, Output> {
         return "${parentPath}:${node.id}"
     }
 
-    protected fun buildSubGraphNodesMap(start: StartAIAgentNodeBase<*>, parentName: String): Map<String, AIAgentNodeBase<*, *>> {
+    protected fun buildSubGraphNodesMap(start: StartAIAgentNodeBase<*>, parentName: String): MutableMap<String, AIAgentNodeBase<*, *>> {
         val map = mutableMapOf<String, AIAgentNodeBase<*, *>>()
 
         fun visit(node: AIAgentNodeBase<*, *>) {
