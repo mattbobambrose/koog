@@ -13,7 +13,7 @@ public class AgentCheckpointFeatureConfig: FeatureConfig() {
      * This can be a custom implementation of [AgentCheckpointStorageProvider] that handles
      * loading and saving snapshots for agents.
      */
-    internal var agentCheckpointStorageProvider: AgentCheckpointStorageProvider = NoAgentCheckpointStorageProvider
+    internal var agentCheckpointStorageProvider: AgentCheckpointStorageProvider = NoAgentCheckpointStorageProvider()
 
     /** Sets the [AgentCheckpointStorageProvider] for this feature.
      * @param agentCheckpointStorageProvider The provider to set.

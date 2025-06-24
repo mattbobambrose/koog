@@ -220,7 +220,7 @@ public open class AIAgent(
             agentContext.forcedContextData = null
 
             val nodeId = contextData.nodeId
-            strategy.findAndSetNode(nodeId)
+            strategy.findAndSetNode(nodeId, contextData.lastInput)
             // If the result is not a success, it should be a retryable result
             strategyResult = strategy.execute(context = agentContext, input = agentInput)
         }

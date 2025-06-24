@@ -41,8 +41,8 @@ public class AIAgentStrategy(
     /**
      * Finds and sets the node for the strategy based on the provided context.
      */
-    public fun findAndSetNode(nodeId: String) {
-        val fullPath = nodeMap.keys.firstOrNull { it.endsWith(nodeId) } ?: return
+    public fun findAndSetNode(nodeId: String, input: Any?) {
+        val fullPath = nodeMap.keys.firstOrNull { it.endsWith(nodeId) } ?: throw IllegalArgumentException("Node $nodeId not found")
         val segments = fullPath.split(":")
         if (segments.isEmpty())
             throw IllegalArgumentException("Invalid node path: $fullPath")
@@ -61,10 +61,11 @@ public class AIAgentStrategy(
             }
         }
 
+        // setting very last segment to latest pre-leaf node to complete the chain
         val leaf = nodeMap[fullPath] ?: throw IllegalStateException("Node ${segments.last()} not found")
         leaf.let {
             currentNode as? HasSubnodes ?: throw IllegalStateException("Node ${currentNode?.name} does not have subnodes")
-            currentNode.enforceNode(it)
+            currentNode.enforceNode(it, input)
         }
     }
 }

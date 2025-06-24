@@ -40,13 +40,7 @@ public open class AIAgentSubgraph<Input, Output>(
      * Node to start the subgraph execution.
      */
     public override var forcedNode: AIAgentNodeBase<*, *>? = null
-
-    public override  fun enforceNode(node: AIAgentNodeBase<*, *>) {
-        if (forcedNode != null) {
-            throw IllegalStateException("Forced node is already set to ${forcedNode!!.name}")
-        }
-        forcedNode = node
-    }
+    override var forcedInput: Any? = null
 
     /**
      * Executes the desired operation based on the input and the provided context.
@@ -71,7 +65,9 @@ public open class AIAgentSubgraph<Input, Output>(
         logger.info { formatLog(context, "Executing subgraph $name") }
         var currentNode: AIAgentNodeBase<*, *> = forcedNode ?: start
         forcedNode = null // reset forced node for the next execution
-        var currentInput: Any? = initialInput
+
+        var currentInput: Any? = forcedInput ?: initialInput
+        forcedInput = null
 
         while (currentNode != finish) {
             context.stateManager.withStateLock { state ->

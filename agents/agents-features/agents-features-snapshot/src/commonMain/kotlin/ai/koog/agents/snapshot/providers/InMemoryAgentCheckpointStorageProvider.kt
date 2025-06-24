@@ -12,16 +12,15 @@ public class InMemoryAgentCheckpointStorageProvider : AgentCheckpointStorageProv
     private val mutex = Mutex()
     private val snapshots = mutableMapOf<String, AgentCheckpointData>()
 
-    override suspend fun getCheckpoint(agentId: String, snapshotId: String): AgentCheckpointData? {
-        val snapshotKey = AgentCheckpointData.SNAPSHOT_ID_PREFIX + snapshotId
+    override suspend fun getCheckpoint(checkpointId: String): AgentCheckpointData? {
         return mutex.withLock {
-            snapshots[snapshotKey]
+            snapshots[checkpointId]
         }
     }
 
-    override suspend fun saveCheckpoint(agentCheckpointData: AgentCheckpointData) {
+    override suspend fun saveCheckpoint(checkpointId: String, agentCheckpointData: AgentCheckpointData) {
         mutex.withLock {
-            snapshots[agentCheckpointData.getSnapshotKey()] = agentCheckpointData
+            snapshots[checkpointId] = agentCheckpointData
         }
     }
 }

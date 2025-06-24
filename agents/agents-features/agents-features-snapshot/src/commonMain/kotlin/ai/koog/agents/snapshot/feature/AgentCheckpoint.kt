@@ -24,7 +24,6 @@ public class AgentCheckpoint(private val agentCheckpointStorageProvider: AgentCh
 
         override fun createInitialConfig(): AgentCheckpointFeatureConfig = AgentCheckpointFeatureConfig()
 
-
         @OptIn(ExperimentalUuidApi::class)
         override fun install(
             config: AgentCheckpointFeatureConfig,
@@ -75,8 +74,12 @@ public class AgentCheckpoint(private val agentCheckpointStorageProvider: AgentCh
         }
     }
 
+    public suspend fun saveCheckpoint(checkpointId: String, checkpointData: AgentCheckpointData) {
+        agentCheckpointStorageProvider.saveCheckpoint(checkpointId, checkpointData)
+    }
+
     public suspend fun getCheckpoint(agentId: String, checkpointId: String): AgentCheckpointData? {
-        return agentCheckpointStorageProvider.getCheckpoint(agentId, checkpointId)
+        return agentCheckpointStorageProvider.getCheckpoint(checkpointId)
     }
 
     public fun setExecutionPoint(agentContext: AIAgentContextBase, nodeId: String, messageHistory: List<Message>, input: Any?) {

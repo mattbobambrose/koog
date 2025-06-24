@@ -11,12 +11,18 @@ public interface HasSubnodes {
     public var forcedNode: AIAgentNodeBase<*, *>?
 
     /**
+     * Holds the input data to be passed explicitly to the forced node during its execution.
+     */
+    public var forcedInput: Any?
+
+    /**
      * Sets a forced node for the entity.
      */
-    public fun enforceNode(node: AIAgentNodeBase<*, *>) {
+    public fun enforceNode(node: AIAgentNodeBase<*, *>, input: Any? = null) {
         if (forcedNode != null) {
             throw IllegalStateException("Forced node is already set to ${forcedNode!!.name}")
         }
         forcedNode = node
+        forcedInput = input
     }
 }
