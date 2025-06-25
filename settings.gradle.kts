@@ -61,4 +61,5 @@ include(":prompt:prompt-model")
 include(":prompt:prompt-structure")
 include(":prompt:prompt-tokenizer")
 include(":prompt:prompt-xml")
-include("prompt:prompt-executor:prompt-executor-clients:prompt-executor-ollama-client")
+
+include(":spring-starter")
