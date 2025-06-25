@@ -441,14 +441,13 @@ public open class AIAgent(
  * 5. Repeat until LLM indicates no further tool calls are needed or the agent finishes.
  */
 public fun singleRunStrategy(): AIAgentStrategy = strategy("single_run") {
-    val nodeCallLLM by nodeLLMRequest("sendInput")
-    val nodeExecuteTool by nodeExecuteTool("nodeExecuteTool")
-    val nodeSendToolResult by nodeLLMSendToolResult("nodeSendToolResult")
+    val nodeCallLLMMultiple by nodeLLMRequestMultiple("sendInput")
+    val executeToolAndSendResult by nodeLLMExecuteMultipleToolsAndSendResults("executeToolAndSendResult")
 
-    edge(nodeStart forwardTo nodeCallLLM)
-    edge(nodeCallLLM forwardTo nodeExecuteTool onToolCall { true })
-    edge(nodeCallLLM forwardTo nodeFinish onAssistantMessage { true })
-    edge(nodeExecuteTool forwardTo nodeSendToolResult)
-    edge(nodeSendToolResult forwardTo nodeFinish onAssistantMessage { true })
-    edge(nodeSendToolResult forwardTo nodeExecuteTool onToolCall { true })
+    edge(nodeStart forwardTo nodeCallLLMMultiple)
+    edge(nodeCallLLMMultiple forwardTo executeToolAndSendResult onMultipleToolCalls { true })
+    edge((nodeCallLLMMultiple forwardTo nodeFinish) transformed { it.first() } onAssistantMessage { true })
+
+    edge(executeToolAndSendResult forwardTo executeToolAndSendResult onMultipleToolCalls { true })
+    edge((executeToolAndSendResult forwardTo nodeFinish) transformed { it.first()} onAssistantMessage { true })
 }
