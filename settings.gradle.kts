@@ -62,4 +62,4 @@ include(":prompt:prompt-structure")
 include(":prompt:prompt-tokenizer")
 include(":prompt:prompt-xml")
 
-include(":spring-starter")
+include(":koog-spring-boot-starter")
